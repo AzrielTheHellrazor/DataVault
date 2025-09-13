@@ -154,7 +154,7 @@ class ComprehensiveTestSuite {
       return {
         balance: balance,
         hasBalance: balance !== undefined,
-        success: typeof balance === 'string' && balance.length > 0
+        success: typeof balance === 'number' && balance >= 0
       };
     }));
 
@@ -166,7 +166,7 @@ class ComprehensiveTestSuite {
       return {
         price: price,
         fileSize: fileSize,
-        success: typeof price === 'string' && price.length > 0
+        success: typeof price === 'number' && price > 0
       };
     }));
 
