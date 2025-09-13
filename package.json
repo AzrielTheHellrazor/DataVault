@@ -13,7 +13,16 @@
     "query": "ts-node src/cli.ts query",
     "fetch": "ts-node src/cli.ts fetch",
     "latest": "ts-node src/cli.ts latest",
-    "balance": "ts-node src/cli.ts balance"
+    "balance": "ts-node src/cli.ts balance",
+    "examples": "ts-node examples/run-all-examples.ts",
+    "example:batch": "ts-node examples/batch-upload-demo.ts",
+    "example:advanced": "ts-node examples/advanced-programmatic-usage.ts",
+    "example:cicd": "ts-node examples/cicd-integration-examples.ts",
+    "example:monitoring": "ts-node examples/monitoring-analytics-demo.ts",
+    "example:security": "ts-node examples/security-audit-examples.ts",
+    "example:test": "ts-node examples/comprehensive-test-suite.ts",
+    "demo": "bun run examples",
+    "demo:quick": "ts-node examples/usage-examples.ts"
   },
   "keywords": ["ai", "data", "repository", "irys", "pytorch", "embeddings"],
   "author": "",

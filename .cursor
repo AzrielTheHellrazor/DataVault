@@ -1,0 +1,24 @@
+# DataVault Project Configuration
+
+## Package Manager
+- Use bun as the package manager
+- Never use npm or yarn commands
+- All scripts should use bun run
+
+## Language
+- All code, comments, and documentation should be in English
+- Never use Turkish or any other language
+
+## Commands
+- Install dependencies: `bun install`
+- Run scripts: `bun run <script>`
+- Build: `bun run build`
+- Test: `bun run test`
+- Development: `bun run dev`
+
+## Project Structure
+- AI Data Repository on Irys blockchain
+- TypeScript with full type safety
+- SQLite for local caching
+- CLI and programmatic API
+- Comprehensive examples in /examples directory
