@@ -1,8 +1,8 @@
 #!/usr/bin/env ts-node
 
 /**
- * DataVault Toplu Yükleme Demonstrasyonu
- * Bu script kapsamlı toplu yükleme örneklerini gösterir
+ * DataVault Batch Upload Demonstration
+ * This script demonstrates comprehensive batch upload examples
  */
 
 import { AIRepository } from '../src/repository';
@@ -11,32 +11,32 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import dotenv from 'dotenv';
 
-// Environment variables yükle
+// Load environment variables
 dotenv.config();
 
 async function createExampleFiles(): Promise<void> {
-  console.log('📁 Örnek dosyalar oluşturuluyor...');
+  console.log('📁 Creating example files...');
   
   const exampleDir = './examples/sample-data';
   await fs.ensureDir(exampleDir);
 
-  // Farklı türde örnek dosyalar oluştur
+  // Create different types of example files
   const files = [
-    // PyTorch model dosyaları
+    // PyTorch model files
     { name: 'mnist_train.pt', content: Buffer.from('PyTorch model - train'), type: 'application/pytorch' },
     { name: 'mnist_val.pt', content: Buffer.from('PyTorch model - validation'), type: 'application/pytorch' },
     { name: 'mnist_test.pt', content: Buffer.from('PyTorch model - test'), type: 'application/pytorch' },
     
-    // Veri seti dosyaları
+    // Dataset files
     { name: 'train_data.json', content: JSON.stringify({ samples: 60000, features: 784 }), type: 'application/json' },
     { name: 'val_data.json', content: JSON.stringify({ samples: 10000, features: 784 }), type: 'application/json' },
     { name: 'test_data.json', content: JSON.stringify({ samples: 10000, features: 784 }), type: 'application/json' },
     
-    // Embedding dosyaları
+    // Embedding files
     { name: 'word_embeddings.vec', content: 'word2vec embeddings data', type: 'application/octet-stream' },
     { name: 'sentence_embeddings.npy', content: Buffer.from('numpy array embeddings'), type: 'application/octet-stream' },
     
-    // Konfigurasyon dosyaları
+    // Configuration files
     { name: 'training_config.json', content: JSON.stringify({ 
       learning_rate: 0.001, 
       batch_size: 32, 
@@ -53,26 +53,26 @@ async function createExampleFiles(): Promise<void> {
     await fs.writeFile(filePath, file.content);
   }
 
-  console.log('✅ Örnek dosyalar oluşturuldu!');
+  console.log('✅ Example files created!');
 }
 
 async function demonstrateBatchUpload(): Promise<void> {
-  console.log('\n🚀 Toplu Yükleme Demonstrasyonu Başlıyor...\n');
+  console.log('\n🚀 Batch Upload Demonstration Starting...\n');
 
   const privateKey = process.env.IRYS_PRIVATE_KEY;
   const dbPath = process.env.DATABASE_PATH || './data/batch-demo.db';
 
   if (!privateKey) {
-    console.error('❌ IRYS_PRIVATE_KEY environment variable gerekli');
+    console.error('❌ IRYS_PRIVATE_KEY environment variable required');
     return;
   }
 
-  // Repository'yi başlat
+  // Initialize repository
   const repository = new AIRepository(privateKey, dbPath);
 
   try {
-    // 1. Model Dosyaları Toplu Yükleme
-    console.log('🤖 1. Model Dosyaları Toplu Yükleme');
+    // 1. Batch Model Files Upload
+    console.log('🤖 1. Batch Model Files Upload');
     console.log('=====================================');
     
     const modelFiles = [
@@ -114,19 +114,19 @@ async function demonstrateBatchUpload(): Promise<void> {
       }
     ];
 
-    console.log('📤 Model dosyaları yükleniyor...');
+    console.log('📤 Uploading model files...');
     const modelResults = await repository.batchUpload(modelFiles, { 
       receipt: true, 
       batchSize: 2 
     });
     
-    console.log('✅ Model yüklemeleri tamamlandı!');
+    console.log('✅ Model uploads completed!');
     modelResults.forEach((result, index) => {
       console.log(`   ${index + 1}. ${result.transactionId} - ${modelFiles[index].metadata.split}`);
     });
 
-    // 2. Veri Seti Dosyaları Toplu Yükleme
-    console.log('\n📊 2. Veri Seti Dosyaları Toplu Yükleme');
+    // 2. Batch Dataset Files Upload
+    console.log('\n📊 2. Batch Dataset Files Upload');
     console.log('========================================');
     
     const datasetFiles = [
@@ -168,19 +168,19 @@ async function demonstrateBatchUpload(): Promise<void> {
       }
     ];
 
-    console.log('📤 Veri seti dosyaları yükleniyor...');
+    console.log('📤 Uploading dataset files...');
     const datasetResults = await repository.batchUpload(datasetFiles, { 
       receipt: true, 
       batchSize: 3 
     });
     
-    console.log('✅ Veri seti yüklemeleri tamamlandı!');
+    console.log('✅ Dataset uploads completed!');
     datasetResults.forEach((result, index) => {
       console.log(`   ${index + 1}. ${result.transactionId} - ${datasetFiles[index].metadata.split}`);
     });
 
-    // 3. Embedding Dosyaları Toplu Yükleme
-    console.log('\n🔍 3. Embedding Dosyaları Toplu Yükleme');
+    // 3. Batch Embedding Files Upload
+    console.log('\n🔍 3. Batch Embedding Files Upload');
     console.log('======================================');
     
     const embeddingFiles = [
@@ -210,19 +210,19 @@ async function demonstrateBatchUpload(): Promise<void> {
       }
     ];
 
-    console.log('📤 Embedding dosyaları yükleniyor...');
+    console.log('📤 Uploading embedding files...');
     const embeddingResults = await repository.batchUpload(embeddingFiles, { 
       receipt: true, 
       batchSize: 2 
     });
     
-    console.log('✅ Embedding yüklemeleri tamamlandı!');
+    console.log('✅ Embedding uploads completed!');
     embeddingResults.forEach((result, index) => {
       console.log(`   ${index + 1}. ${result.transactionId} - ${embeddingFiles[index].metadata.datasetName}`);
     });
 
-    // 4. Konfigurasyon Dosyaları Toplu Yükleme
-    console.log('\n⚙️ 4. Konfigurasyon Dosyaları Toplu Yükleme');
+    // 4. Batch Configuration Files Upload
+    console.log('\n⚙️ 4. Batch Configuration Files Upload');
     console.log('==========================================');
     
     const configFiles = [
@@ -252,19 +252,19 @@ async function demonstrateBatchUpload(): Promise<void> {
       }
     ];
 
-    console.log('📤 Konfigurasyon dosyaları yükleniyor...');
+    console.log('📤 Uploading configuration files...');
     const configResults = await repository.batchUpload(configFiles, { 
       receipt: true, 
       batchSize: 2 
     });
     
-    console.log('✅ Konfigurasyon yüklemeleri tamamlandı!');
+    console.log('✅ Configuration uploads completed!');
     configResults.forEach((result, index) => {
       console.log(`   ${index + 1}. ${result.transactionId} - ${configFiles[index].metadata.datasetName}`);
     });
 
-    // 5. Toplu Sorgu Testi
-    console.log('\n🔍 5. Toplu Yükleme Sonuçlarını Sorgulama');
+    // 5. Batch Query Test
+    console.log('\n🔍 5. Querying Batch Upload Results');
     console.log('========================================');
     
     const queryResults = await repository.queryData({
@@ -272,7 +272,7 @@ async function demonstrateBatchUpload(): Promise<void> {
       limit: 20
     });
     
-    console.log(`📊 Batch-demo uygulaması için ${queryResults.results.length} sonuç bulundu:`);
+    console.log(`📊 Found ${queryResults.results.length} results for batch-demo application:`);
     queryResults.results.forEach((result, index) => {
       console.log(`   ${index + 1}. ${result.tags.datasetName} (${result.tags.split}) - v${result.tags.version}`);
     });
@@ -282,31 +282,31 @@ async function demonstrateBatchUpload(): Promise<void> {
     console.log('===============================');
     
     const totalFiles = modelFiles.length + datasetFiles.length + embeddingFiles.length + configFiles.length;
-    console.log(`✅ Toplam ${totalFiles} dosya başarıyla yüklendi`);
-    console.log(`📊 Toplu işlem verimli şekilde tamamlandı`);
-    console.log(`🔍 Tüm dosyalar sorgulanabilir durumda`);
+    console.log(`✅ Total ${totalFiles} files uploaded successfully`);
+    console.log(`📊 Batch operation completed efficiently`);
+    console.log(`🔍 All files are queryable`);
 
-    // 7. Hesap Bakiyesi Kontrolü
-    console.log('\n💰 7. Hesap Bakiyesi');
+    // 7. Account Balance Check
+    console.log('\n💰 7. Account Balance');
     console.log('==================');
     
     const balance = await repository.getBalance();
-    console.log(`💳 Güncel bakiye: ${balance} AR`);
+    console.log(`💳 Current balance: ${balance} AR`);
 
   } catch (error) {
-    console.error('❌ Toplu yükleme hatası:', error instanceof Error ? error.message : String(error));
+    console.error('❌ Batch upload error:', error instanceof Error ? error.message : String(error));
   } finally {
     await repository.close();
   }
 }
 
 async function cleanupExampleFiles(): Promise<void> {
-  console.log('\n🧹 Örnek dosyalar temizleniyor...');
+  console.log('\n🧹 Cleaning up example files...');
   
   const exampleDir = './examples/sample-data';
   if (await fs.pathExists(exampleDir)) {
     await fs.remove(exampleDir);
-    console.log('✅ Temizlik tamamlandı!');
+    console.log('✅ Cleanup completed!');
   }
 }
 
@@ -316,13 +316,13 @@ async function main() {
     await createExampleFiles();
     await demonstrateBatchUpload();
   } catch (error) {
-    console.error('❌ Demo hatası:', error);
+    console.error('❌ Demo error:', error);
   } finally {
     await cleanupExampleFiles();
   }
 }
 
-// Script doğrudan çalıştırılırsa main'i çağır
+// Call main if script is run directly
 if (require.main === module) {
   main();
 }
