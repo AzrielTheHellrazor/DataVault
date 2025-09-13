@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# DataVault CLI Kullanım Örnekleri
-# Bu script tüm temel CLI komutlarını demonstre eder
+# DataVault CLI Usage Examples
+# This script demonstrates all basic CLI commands
 
-echo "🚀 DataVault CLI Örnekleri - Başlatılıyor..."
+echo "🚀 DataVault CLI Examples - Starting..."
 
 # Renk kodları
 GREEN='\033[0;32m'
@@ -12,129 +12,129 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Örnek dosyalar oluştur
-echo -e "${BLUE}📁 Örnek dosyalar oluşturuluyor...${NC}"
+# Create example files
+echo -e "${BLUE}📁 Creating example files...${NC}"
 mkdir -p example-data
 echo '{"model": "mnist_classifier", "accuracy": 0.98, "epochs": 50}' > example-data/model_info.json
 echo '{"training_data": "mnist", "batch_size": 32, "learning_rate": 0.001}' > example-data/training_config.json
 dd if=/dev/urandom of=example-data/model.pt bs=1024 count=10 2>/dev/null
 echo "Example dataset content" > example-data/dataset.txt
 
-echo -e "\n${GREEN}✅ Örnek dosyalar hazırlandı!${NC}"
+echo -e "\n${GREEN}✅ Example files prepared!${NC}"
 
-# 1. Dosya Yükleme Örnekleri
-echo -e "\n${BLUE}📤 1. DOSYA YÜKLEME ÖRNEKLERİ${NC}"
+# 1. File Upload Examples
+echo -e "\n${BLUE}📤 1. FILE UPLOAD EXAMPLES${NC}"
 
-echo -e "\n${YELLOW}🤖 PyTorch Model Yükleme:${NC}"
+echo -e "\n${YELLOW}🤖 PyTorch Model Upload:${NC}"
 echo "bun run upload -- -f ./example-data/model.pt -a ml-training -n mnist-classifier -s production -v 1.0.0 -o team@example.com --receipt"
 
-echo -e "\n${YELLOW}📊 Veri Seti Yükleme:${NC}"
+echo -e "\n${YELLOW}📊 Dataset Upload:${NC}"
 echo "bun run upload -- -f ./example-data/dataset.txt -a data-pipeline -n customer-data -s train -v 1.0.0 -o data-team@example.com --receipt"
 
-echo -e "\n${YELLOW}⚙️ Konfigurasyon Dosyası Yükleme:${NC}"
+echo -e "\n${YELLOW}⚙️ Configuration File Upload:${NC}"
 echo "bun run upload -- -f ./example-data/training_config.json -a ml-training -n training-config -s production -v 1.0.0 -o ml-engineer@example.com --receipt"
 
-echo -e "\n${YELLOW}📋 Model Bilgileri Yükleme:${NC}"
+echo -e "\n${YELLOW}📋 Model Info Upload:${NC}"
 echo "bun run upload -- -f ./example-data/model_info.json -a ml-training -n model-metadata -s production -v 1.0.0 -o ml-engineer@example.com --receipt"
 
-# 2. Sorgulama Örnekleri
-echo -e "\n${BLUE}🔍 2. SORGULAMA ÖRNEKLERİ${NC}"
+# 2. Query Examples
+echo -e "\n${BLUE}🔍 2. QUERY EXAMPLES${NC}"
 
-echo -e "\n${YELLOW}🎯 Belirli veri seti arama:${NC}"
+echo -e "\n${YELLOW}🎯 Search specific dataset:${NC}"
 echo "bun run query -- -n mnist-classifier -l 10"
 
-echo -e "\n${YELLOW}📱 Uygulama bazlı arama:${NC}"
+echo -e "\n${YELLOW}📱 App-based search:${NC}"
 echo "bun run query -- -a ml-training -l 20"
 
-echo -e "\n${YELLOW}👤 Sahip bazlı arama:${NC}"
+echo -e "\n${YELLOW}👤 Owner-based search:${NC}"
 echo "bun run query -- -o team@example.com -l 15"
 
-echo -e "\n${YELLOW}🗂️ Split bazlı arama:${NC}"
+echo -e "\n${YELLOW}🗂️ Split-based search:${NC}"
 echo "bun run query -- -s production -l 10"
 
-echo -e "\n${YELLOW}📅 Tarih aralığında arama:${NC}"
+echo -e "\n${YELLOW}📅 Date range search:${NC}"
 echo "bun run query -- --start-time 2024-01-01T00:00:00Z --end-time 2024-12-31T23:59:59Z -l 20"
 
-echo -e "\n${YELLOW}🔄 Karmaşık filtreleme:${NC}"
+echo -e "\n${YELLOW}🔄 Complex filtering:${NC}"
 echo "bun run query -- -n mnist-classifier -s production -a ml-training -o team@example.com -l 5"
 
-# 3. Dosya İndirme Örnekleri
-echo -e "\n${BLUE}📥 3. DOSYA İNDİRME ÖRNEKLERİ${NC}"
+# 3. File Download Examples
+echo -e "\n${BLUE}📥 3. FILE DOWNLOAD EXAMPLES${NC}"
 
-echo -e "\n${YELLOW}⬇️ Transaction ID ile indirme:${NC}"
+echo -e "\n${YELLOW}⬇️ Download with Transaction ID:${NC}"
 echo "bun run fetch -- -i <TRANSACTION_ID> -o ./downloads/"
 
-echo -e "\n${YELLOW}🔄 Üzerine yazma ile indirme:${NC}"
+echo -e "\n${YELLOW}🔄 Download with overwrite:${NC}"
 echo "bun run fetch -- -i <TRANSACTION_ID> -o ./downloads/model.pt --overwrite"
 
-# 4. Sürüm Yönetimi Örnekleri
-echo -e "\n${BLUE}📋 4. SÜRÜM YÖNETİMİ ÖRNEKLERİ${NC}"
+# 4. Version Management Examples
+echo -e "\n${BLUE}📋 4. VERSION MANAGEMENT EXAMPLES${NC}"
 
-echo -e "\n${YELLOW}🆕 En son sürümü getirme:${NC}"
+echo -e "\n${YELLOW}🆕 Get latest version:${NC}"
 echo "bun run latest -- -n mnist-classifier -s production"
 
-echo -e "\n${YELLOW}🔍 Belirli split'in en son sürümü:${NC}"
+echo -e "\n${YELLOW}🔍 Latest version of specific split:${NC}"
 echo "bun run latest -- -n customer-data -s train"
 
-# 5. Hesap Yönetimi
-echo -e "\n${BLUE}💰 5. HESAP YÖNETİMİ${NC}"
+# 5. Account Management
+echo -e "\n${BLUE}💰 5. ACCOUNT MANAGEMENT${NC}"
 
-echo -e "\n${YELLOW}💳 Hesap bakiyesi kontrol:${NC}"
+echo -e "\n${YELLOW}💳 Account balance check:${NC}"
 echo "bun run balance"
 
-# 6. Gelişmiş Kullanım Senaryoları
-echo -e "\n${BLUE}🚀 6. GELİŞMİŞ KULLANIM SENARYOLARI${NC}"
+# 6. Advanced Usage Scenarios
+echo -e "\n${BLUE}🚀 6. ADVANCED USAGE SCENARIOS${NC}"
 
 echo -e "\n${YELLOW}🔄 Model pipeline workflow:${NC}"
 cat << 'EOF'
-# 1. Model eğitimi sonrası checkpoint yükle
+# 1. Upload checkpoint after model training
 bun run upload -- -f ./models/checkpoint_epoch_50.pt -a ml-pipeline -n mnist-v2 -s checkpoint -v 1.1.0 -o trainer@example.com --receipt
 
-# 2. En son checkpoint'i bul
+# 2. Find latest checkpoint
 bun run latest -- -n mnist-v2 -s checkpoint
 
-# 3. Production'a terfi ettir
+# 3. Promote to production
 bun run upload -- -f ./models/final_model.pt -a ml-pipeline -n mnist-v2 -s production -v 1.1.0 -o mlops@example.com --receipt
 
-# 4. Production modelini doğrula
+# 4. Verify production model
 bun run query -- -n mnist-v2 -s production -v 1.1.0
 EOF
 
 echo -e "\n${YELLOW}📊 Veri seti management workflow:${NC}"
 cat << 'EOF'
-# 1. Ham veriyi yükle
+# 1. Upload raw data
 bun run upload -- -f ./data/raw_data.csv -a data-processing -n customer-analytics -s raw -v 1.0.0 -o data-engineer@example.com --receipt
 
-# 2. İşlenmiş veriyi yükle
+# 2. Upload processed data
 bun run upload -- -f ./data/processed_features.csv -a data-processing -n customer-analytics -s processed -v 1.0.0 -o data-engineer@example.com --receipt
 
-# 3. Train/test split'lerini yükle
+# 3. Upload train/test splits
 bun run upload -- -f ./data/train_set.csv -a ml-ready -n customer-analytics -s train -v 1.0.0 -o ml-team@example.com --receipt
 bun run upload -- -f ./data/test_set.csv -a ml-ready -n customer-analytics -s test -v 1.0.0 -o ml-team@example.com --receipt
 EOF
 
-# 7. İzleme ve Audit
+# 7. Monitoring and Audit
 echo -e "\n${YELLOW}📈 İzleme ve audit workflow:${NC}"
 cat << 'EOF'
-# 1. Günlük model performansını kaydet
+# 1. Record daily model performance
 bun run upload -- -f ./metrics/daily_metrics.json -a monitoring -n model-performance -s daily -v $(date +%Y.%m.%d) -o monitor@example.com --receipt
 
-# 2. Son 30 günün metriklerini listele
+# 2. List last 30 days metrics
 bun run query -- -n model-performance -s daily --start-time $(date -d '30 days ago' -Iseconds) -l 30
 
-# 3. Audit log'larını kaydet
+# 3. Record audit logs
 bun run upload -- -f ./logs/audit_$(date +%Y%m%d).log -a audit -n system-audit -s daily -v $(date +%Y.%m.%d) -o security@example.com --receipt
 EOF
 
-# Temizlik uyarısı
-echo -e "\n${RED}🧹 Temizlik:${NC}"
+# Cleanup warning
+echo -e "\n${RED}🧹 Cleanup:${NC}"
 echo "rm -rf example-data"
 
-echo -e "\n${GREEN}✅ Tüm CLI örnekleri listelendi!${NC}"
-echo -e "${BLUE}💡 Bu komutları çalıştırmadan önce .env dosyasını doğru şekilde yapılandırdığınızdan emin olun.${NC}"
+echo -e "\n${GREEN}✅ All CLI examples listed!${NC}"
+echo -e "${BLUE}💡 Make sure to properly configure your .env file before running these commands.${NC}"
 
 # Örnek dosyaları temizle
-echo -e "\n${YELLOW}🧹 Örnek dosyalar temizleniyor...${NC}"
+echo -e "\n${YELLOW}🧹 Cleaning up example files...${NC}"
 rm -rf example-data
 
-echo -e "${GREEN}✅ Temizlik tamamlandı!${NC}"
+echo -e "${GREEN}✅ Cleanup completed!${NC}"
