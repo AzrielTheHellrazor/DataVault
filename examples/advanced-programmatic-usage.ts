@@ -1,12 +1,12 @@
 #!/usr/bin/env ts-node
 
 /**
- * DataVault Gelişmiş Programatik Kullanım Örnekleri
- * Bu script gelişmiş özellikler ve kullanım senaryolarını demonstre eder
+ * DataVault Advanced Programmatic Usage Examples
+ * This script demonstrates advanced features and usage scenarios
  */
 
 import { AIRepository } from '../src/repository';
-import { DatasetMetadata, QueryOptions, UploadResult, DatasetRecord } from '../src/types';
+import { DatasetMetadata, QueryOptions, DatabaseRecord } from '../src/types';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import dotenv from 'dotenv';
@@ -22,7 +22,7 @@ class AdvancedDataVaultDemo {
   }
 
   async initialize(): Promise<void> {
-    console.log('🚀 Gelişmiş DataVault Demo Başlatılıyor...\n');
+    console.log('🚀 Starting Advanced DataVault Demo...\n');
     await this.createAdvancedExampleFiles();
   }
 
@@ -32,11 +32,11 @@ class AdvancedDataVaultDemo {
   }
 
   private async createAdvancedExampleFiles(): Promise<void> {
-    console.log('📁 Gelişmiş örnek dosyalar oluşturuluyor...');
+    console.log('📁 Creating advanced example files...');
     
     await fs.ensureDir(this.exampleDir);
 
-    // Model versiyonları
+    // Model versions
     for (let version = 1; version <= 3; version++) {
       const modelData = {
         version: `1.${version}.0`,
@@ -52,14 +52,14 @@ class AdvancedDataVaultDemo {
         JSON.stringify(modelData, null, 2)
       );
 
-      // PyTorch model dosyası simulation
+      // PyTorch model file simulation
       await fs.writeFile(
         path.join(this.exampleDir, `model_v${version}.pt`),
         Buffer.from(`PyTorch model v${version} - ${modelData.accuracy} accuracy`)
       );
     }
 
-    // Farklı veri seti split'leri
+    // Different dataset splits
     const splits = ['train', 'validation', 'test'];
     for (const split of splits) {
       const splitData = {
@@ -95,15 +95,15 @@ class AdvancedDataVaultDemo {
       );
     }
 
-    console.log('✅ Gelişmiş örnek dosyalar hazırlandı!');
+    console.log('✅ Advanced example files prepared!');
   }
 
-  // 1. Versiyon Bazlı Model Yönetimi
+  // 1. Version-Based Model Management
   async demonstrateVersionManagement(): Promise<void> {
-    console.log('\n🔄 1. VERSİYON BAZLI MODEL YÖNETİMİ');
+    console.log('\n🔄 1. VERSION-BASED MODEL MANAGEMENT');
     console.log('=====================================');
 
-    // Farklı versiyonları yükle
+    // Upload different versions
     for (let version = 1; version <= 3; version++) {
       const metadata: DatasetMetadata = {
         app: 'version-management-demo',
@@ -115,14 +115,14 @@ class AdvancedDataVaultDemo {
         createdAt: new Date().toISOString()
       };
 
-      console.log(`📤 Model v1.${version}.0 yükleniyor...`);
+      console.log(`📤 Uploading model v1.${version}.0...`);
       const result = await this.repository.uploadFile(
         path.join(this.exampleDir, `model_v${version}.pt`),
         metadata,
         { receipt: true }
       );
       
-      // Metadata dosyasını da yükle
+      // Also upload metadata file
       const metadataJson: DatasetMetadata = {
         ...metadata,
         contentType: 'application/json',
@@ -136,11 +136,11 @@ class AdvancedDataVaultDemo {
         { receipt: true }
       );
 
-      console.log(`✅ v1.${version}.0 yüklendi - Transaction: ${result.transactionId}`);
+      console.log(`✅ v1.${version}.0 uploaded - Transaction: ${result.transactionId}`);
     }
 
-    // Tüm versiyonları listele
-    console.log('\n📋 Tüm model versiyonları:');
+    // List all versions
+    console.log('\n📋 All model versions:');
     const allVersions = await this.repository.getVersions('mnist-evolution', 'production');
     allVersions.forEach((version, index) => {
       console.log(`   ${index + 1}. v${version.tags.version} - ${new Date(version.timestamp).toLocaleDateString()}`);
@@ -153,9 +153,9 @@ class AdvancedDataVaultDemo {
     }
   }
 
-  // 2. Gelişmiş Sorgulama Teknikleri
+  // 2. Advanced Querying Techniques
   async demonstrateAdvancedQuerying(): Promise<void> {
-    console.log('\n🔍 2. GELİŞMİŞ SORGULAMA TEKNİKLERİ');
+    console.log('\n🔍 2. ADVANCED QUERYING TECHNIQUES');
     console.log('===================================');
 
     // Pagination ile sorgulama
@@ -171,7 +171,7 @@ class AdvancedDataVaultDemo {
       };
       
       const results = await this.repository.queryData(queryOptions);
-      console.log(`   Sayfa ${page}: ${results.results.length} sonuç`);
+      console.log(`   Page ${page}: ${results.results.length} results`);
       
       results.results.forEach((result, index) => {
         console.log(`     ${index + 1}. ${result.tags.datasetName} v${result.tags.version}`);
@@ -179,10 +179,10 @@ class AdvancedDataVaultDemo {
       
       cursor = results.nextCursor;
       page++;
-    } while (cursor && page <= 3); // Sadece 3 sayfa göster
+    } while (cursor && page <= 3); // Show only 3 pages
 
-    // Zaman aralığı sorgulama
-    console.log('\n📅 Son 24 saat sorgulama:');
+    // Time range query
+    console.log('\n📅 Last 24 hours query:');
     const recentQuery = await this.repository.queryData({
       filters: {
         app: 'version-management-demo',
@@ -193,10 +193,10 @@ class AdvancedDataVaultDemo {
       limit: 5
     });
 
-    console.log(`   Son 24 saatte ${recentQuery.results.length} yükleme yapıldı`);
+    console.log(`   ${recentQuery.results.length} uploads made in the last 24 hours`);
 
-    // İçerik türü bazlı sorgulama
-    console.log('\n🎯 İçerik türü bazlı sorgulama:');
+    // Content type based query
+    console.log('\n🎯 Content type based query:');
     const pytorchModels = await this.repository.queryData({
       filters: { 
         app: 'version-management-demo',
@@ -215,15 +215,15 @@ class AdvancedDataVaultDemo {
       limit: 10
     });
 
-    console.log(`   ${jsonFiles.results.length} JSON dosyası bulundu`);
+    console.log(`   ${jsonFiles.results.length} JSON files found`);
   }
 
-  // 3. Toplu İşlem Optimizasyonları
+  // 3. Batch Processing Optimizations
   async demonstrateBatchOptimizations(): Promise<void> {
-    console.log('\n⚡ 3. TOPLU İŞLEM OPTİMİZASYONLARI');
+    console.log('\n⚡ 3. BATCH PROCESSING OPTIMIZATIONS');
     console.log('==================================');
 
-    // Dataset split'lerini toplu yükleme
+    // Batch upload dataset splits
     const datasetFiles = ['train', 'validation', 'test'].map(split => ({
       filePath: path.join(this.exampleDir, `${split}_dataset.json`),
       metadata: {
@@ -237,7 +237,7 @@ class AdvancedDataVaultDemo {
       } as DatasetMetadata
     }));
 
-    console.log('📊 Dataset split'leri toplu yükleniyor...');
+    console.log('📊 Batch uploading dataset splits...');
     const startTime = Date.now();
     
     const batchResults = await this.repository.batchUpload(datasetFiles, {
@@ -248,12 +248,12 @@ class AdvancedDataVaultDemo {
     const endTime = Date.now();
     const uploadTime = (endTime - startTime) / 1000;
 
-    console.log(`✅ ${batchResults.length} dosya ${uploadTime.toFixed(2)} saniyede yüklendi`);
-    console.log(`⚡ Ortalama: ${(uploadTime / batchResults.length).toFixed(2)} saniye/dosya`);
+    console.log(`✅ ${batchResults.length} files uploaded in ${uploadTime.toFixed(2)} seconds`);
+    console.log(`⚡ Average: ${(uploadTime / batchResults.length).toFixed(2)} seconds/file`);
 
-    // Batch upload results analizi
+    // Batch upload results analysis
     const successfulUploads = batchResults.filter(r => r.transactionId);
-    console.log(`📈 Başarı oranı: ${((successfulUploads.length / batchResults.length) * 100).toFixed(1)}%`);
+    console.log(`📈 Success rate: ${((successfulUploads.length / batchResults.length) * 100).toFixed(1)}%`);
   }
 
   // 4. Performance İzleme Sistemi
@@ -261,8 +261,8 @@ class AdvancedDataVaultDemo {
     console.log('\n📈 4. PERFORMANCE İZLEME SİSTEMİ');
     console.log('===============================');
 
-    // Günlük metrikleri yükle
-    const metricFiles = [];
+    // Upload daily metrics
+    const metricFiles: Array<{ filePath: string; metadata: DatasetMetadata }> = [];
     for (let day = 1; day <= 5; day++) {
       metricFiles.push({
         filePath: path.join(this.exampleDir, `metrics_day_${day}.json`),
@@ -278,13 +278,13 @@ class AdvancedDataVaultDemo {
       });
     }
 
-    console.log('📊 Günlük performans metrikleri yükleniyor...');
+    console.log('📊 Uploading daily performance metrics...');
     const metricResults = await this.repository.batchUpload(metricFiles, {
       receipt: true,
       batchSize: 2
     });
 
-    console.log(`✅ ${metricResults.length} günlük metrik kaydedildi`);
+    console.log(`✅ ${metricResults.length} daily metrics recorded`);
 
     // Metrik analizi
     console.log('\n📊 Performans analizi:');
@@ -298,24 +298,24 @@ class AdvancedDataVaultDemo {
       limit: 10
     });
 
-    console.log(`   ${metricsQuery.results.length} günlük metrik kaydı bulundu`);
+    console.log(`   ${metricsQuery.results.length} daily metric records found`);
     
-    // En son metrikleri göster
+    // Show latest metrics
     if (metricsQuery.results.length > 0) {
       const latestMetrics = await this.repository.getLatestVersion('daily-metrics', 'production');
       if (latestMetrics) {
-        console.log(`   En son kayıt: ${latestMetrics.tags.version}`);
+        console.log(`   Latest record: ${latestMetrics.tags.version}`);
       }
     }
   }
 
-  // 5. Akıllı Veri Keşfi
+  // 5. Intelligent Data Discovery
   async demonstrateIntelligentDataDiscovery(): Promise<void> {
-    console.log('\n🧠 5. AKILLI VERİ KEŞFİ');
+    console.log('\n🧠 5. INTELLIGENT DATA DISCOVERY');
     console.log('======================');
 
-    // Tüm uygulamaları keşfet
-    console.log('🔍 Mevcut uygulamalar:');
+    // Discover all applications
+    console.log('🔍 Available applications:');
     const allApps = new Set<string>();
     
     const allRecords = await this.repository.queryData({
@@ -327,13 +327,13 @@ class AdvancedDataVaultDemo {
       allApps.add(record.tags.app);
     });
 
-    console.log(`   Toplam ${allApps.size} farklı uygulama bulundu:`);
+    console.log(`   Total ${allApps.size} different applications found:`);
     Array.from(allApps).forEach((app, index) => {
       console.log(`   ${index + 1}. ${app}`);
     });
 
-    // Veri seti türleri analizi
-    console.log('\n📊 Veri seti türleri:');
+    // Dataset types analysis
+    console.log('\n📊 Dataset types:');
     const contentTypes = new Map<string, number>();
     
     allRecords.results.forEach(record => {
@@ -359,7 +359,7 @@ class AdvancedDataVaultDemo {
       .slice(0, 5);
 
     sortedOwners.forEach(([owner, count], index) => {
-      console.log(`   ${index + 1}. ${owner}: ${count} yükleme`);
+      console.log(`   ${index + 1}. ${owner}: ${count} uploads`);
     });
   }
 
@@ -368,7 +368,7 @@ class AdvancedDataVaultDemo {
     console.log('\n💾 6. OTOMATİK YEDEKLEME VE SENKRONİZASYON');
     console.log('==========================================');
 
-    // Critical dosyaları listele
+    // List critical files
     const criticalFiles = await this.repository.queryData({
       filters: {
         split: 'production'
@@ -378,27 +378,27 @@ class AdvancedDataVaultDemo {
 
     console.log(`🔒 ${criticalFiles.results.length} kritik dosya bulundu (production)`);
 
-    // Yedekleme simülasyonu
-    console.log('\n💾 Yedekleme işlemi simülasyonu:');
+    // Backup simulation
+    console.log('\n💾 Backup process simulation:');
     const backupDir = './examples/backup';
     await fs.ensureDir(backupDir);
 
     let backupCount = 0;
-    for (const file of criticalFiles.results.slice(0, 3)) { // Sadece 3 dosya için demo
+    for (const file of criticalFiles.results.slice(0, 3)) { // Demo for only 3 files
       try {
         const localPath = path.join(backupDir, `backup_${file.id}.download`);
         
-        // Dosyayı indir (simülasyon)
-        console.log(`   📥 Yedekleniyor: ${file.tags.datasetName} v${file.tags.version}`);
+        // Download file (simulation)
+        console.log(`   📥 Backing up: ${file.tags.datasetName} v${file.tags.version}`);
         
         // Real implementation would use:
         // await this.repository.fetchFile({ transactionId: file.id, localPath });
         
-        // Simülasyon için dosya oluştur
+        // Create file for simulation
         await fs.writeFile(localPath, `Backup of ${file.tags.datasetName}`);
         backupCount++;
       } catch (error) {
-        console.log(`   ❌ Yedekleme hatası: ${file.tags.datasetName}`);
+        console.log(`   ❌ Backup error: ${file.tags.datasetName}`);
       }
     }
 
@@ -408,29 +408,29 @@ class AdvancedDataVaultDemo {
     await fs.remove(backupDir);
   }
 
-  // 7. Gelişmiş Metadata Analizi
+  // 7. Advanced Metadata Analysis
   async demonstrateMetadataAnalysis(): Promise<void> {
-    console.log('\n🏷️ 7. GELİŞMİŞ METADATA ANALİZİ');
+    console.log('\n🏷️ 7. ADVANCED METADATA ANALYSIS');
     console.log('===============================');
 
-    // Tüm kayıtları al
+    // Get all records
     const allRecords = await this.repository.queryData({
       filters: {},
       limit: 100
     });
 
-    // Zaman bazlı analiz
+    // Time-based analysis
     const timeAnalysis = new Map<string, number>();
     allRecords.results.forEach(record => {
       const date = new Date(record.timestamp).toISOString().split('T')[0];
       timeAnalysis.set(date, (timeAnalysis.get(date) || 0) + 1);
     });
 
-    console.log('📅 Günlük yükleme aktivitesi:');
+    console.log('📅 Daily upload activity:');
     Array.from(timeAnalysis.entries())
       .sort()
       .forEach(([date, count]) => {
-        console.log(`   ${date}: ${count} yükleme`);
+        console.log(`   ${date}: ${count} uploads`);
       });
 
     // Versiyon analizi
@@ -446,7 +446,7 @@ class AdvancedDataVaultDemo {
       }
     });
 
-    console.log('\n🔢 Major versiyon dağılımı:');
+    console.log('\n🔢 Major version distribution:');
     Array.from(majorVersions.entries()).forEach(([version, count]) => {
       console.log(`   ${version}: ${count} dosya`);
     });
@@ -458,30 +458,30 @@ class AdvancedDataVaultDemo {
       splitAnalysis.set(split, (splitAnalysis.get(split) || 0) + 1);
     });
 
-    console.log('\n📂 Split dağılımı:');
+    console.log('\n📂 Split distribution:');
     Array.from(splitAnalysis.entries()).forEach(([split, count]) => {
       console.log(`   ${split}: ${count} dosya`);
     });
   }
 
   private async cleanupFiles(): Promise<void> {
-    console.log('\n🧹 Gelişmiş örnek dosyalar temizleniyor...');
+    console.log('\n🧹 Cleaning up advanced example files...');
     if (await fs.pathExists(this.exampleDir)) {
       await fs.remove(this.exampleDir);
-      console.log('✅ Temizlik tamamlandı!');
+      console.log('✅ Cleanup completed!');
     }
   }
 }
 
 // Main execution function
 async function main() {
-  console.log('🚀 DataVault Gelişmiş Programatik Kullanım Demo\n');
+  console.log('🚀 DataVault Advanced Programmatic Usage Demo\n');
 
   const privateKey = process.env.IRYS_PRIVATE_KEY;
   const dbPath = process.env.DATABASE_PATH || './data/advanced-demo.db';
 
   if (!privateKey) {
-    console.error('❌ IRYS_PRIVATE_KEY environment variable gerekli');
+    console.error('❌ IRYS_PRIVATE_KEY environment variable required');
     return;
   }
 
@@ -498,17 +498,17 @@ async function main() {
     await demo.demonstrateBackupAndSync();
     await demo.demonstrateMetadataAnalysis();
     
-    console.log('\n🎉 Tüm gelişmiş özellikler demonstre edildi!');
-    console.log('💡 Bu örnekler production ortamında kullanılabilir!');
+    console.log('\n🎉 All advanced features demonstrated!');
+    console.log('💡 These examples can be used in production environment!');
     
   } catch (error) {
-    console.error('❌ Demo hatası:', error instanceof Error ? error.message : String(error));
+    console.error('❌ Demo error:', error instanceof Error ? error.message : String(error));
   } finally {
     await demo.cleanup();
   }
 }
 
-// Script doğrudan çalıştırılırsa main'i çağır
+// Call main if script is run directly
 if (require.main === module) {
   main();
 }
