@@ -125,10 +125,38 @@ The following metadata tags are required for each uploaded file:
 
 ## Examples & Documentation
 
-### **Real-World Examples**
+### **Comprehensive Examples Suite**
+- 🚀 **`examples/run-all-examples.ts`** - Master runner for all demonstrations
+- 📦 **`examples/batch-upload-demo.ts`** - Batch operations and bulk processing
+- 🎯 **`examples/advanced-programmatic-usage.ts`** - Advanced features and patterns
+- 🏗️ **`examples/cicd-integration-examples.ts`** - CI/CD pipelines and deployment strategies
+- 📊 **`examples/monitoring-analytics-demo.ts`** - Performance monitoring and analytics
+- 🔒 **`examples/security-audit-examples.ts`** - Security features and compliance
+- 🧪 **`examples/comprehensive-test-suite.ts`** - Full system testing and validation
+
+### **Documentation & References**
 - 📖 **`examples/real-world-examples.md`** - Practical use cases for ML models, datasets, embeddings
 - 🔍 **`examples/graphql-queries.md`** - Complete GraphQL query reference
-- 💻 **`examples/usage-examples.ts`** - TypeScript code examples
+- 💻 **`examples/usage-examples.ts`** - Basic TypeScript code examples
+- 💾 **`examples/cli-examples.sh`** - Command-line usage demonstrations
+- 📚 **`examples/README.md`** - Detailed examples documentation
+
+### **Quick Start with Examples**
+```bash
+# Run all example demonstrations
+bun run examples
+
+# Run specific example categories
+bun run example:batch        # Batch upload demonstrations
+bun run example:advanced     # Advanced programmatic features
+bun run example:cicd         # CI/CD integration patterns
+bun run example:monitoring   # Performance monitoring & analytics
+bun run example:security     # Security & audit features
+bun run example:test         # Comprehensive test suite
+
+# Quick demo of basic features
+bun run demo:quick
+```
 
 ### **Common Use Cases**
 ```bash

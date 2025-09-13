@@ -40,7 +40,7 @@ async function main() {
       const uploadResult = await repository.uploadFile(exampleFile, metadata, { receipt: true });
       console.log('Upload successful:', uploadResult);
     } catch (error) {
-      console.log('⚠️  Upload failed (network/balance issue):', error.message);
+      console.log('⚠️  Upload failed (network/balance issue):', error instanceof Error ? error.message : String(error));
       console.log('✅ Upload structure is working correctly');
     }
 

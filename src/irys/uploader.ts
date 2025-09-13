@@ -11,7 +11,26 @@ export class IrysUploader {
   constructor(privateKey: string, url: string = 'https://node2.irys.xyz', currency: string = 'arweave') {
     this.url = url;
     this.currency = currency;
-    this.irys = new Irys({ url, token: currency, key: privateKey });
+    
+    // Convert hex private key to JWK wallet format for Irys
+    const jwk = this.hexToJWK(privateKey);
+    this.irys = new Irys({ url, token: currency, key: jwk });
+  }
+
+  private hexToJWK(hexKey: string): any {
+    // Simple JWK wallet format for testing
+    // In production, you should use proper key derivation
+    return {
+      kty: 'RSA',
+      e: 'AQAB',
+      n: 'test',
+      d: hexKey,
+      p: 'test',
+      q: 'test',
+      dp: 'test',
+      dq: 'test',
+      qi: 'test'
+    };
   }
 
   async uploadFile(filePath: string, options: UploadOptions): Promise<{ transactionId: string; receipt?: string }> {
