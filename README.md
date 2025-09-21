@@ -1,6 +1,6 @@
 # AI Data Repository on Irys
 
-[![npm version](https://badge.fury.io/js/datavault.svg)](https://www.npmjs.com/package/datavault)
+[![npm version](https://badge.fury.io/js/@goktus/datavault.svg)](https://www.npmjs.com/package/@goktus/datavault)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
@@ -22,17 +22,17 @@ A minimal data repository for storing and managing AI datasets, embeddings, and 
 ### As an NPM Package
 
 ```bash
-npm install datavault
+npm install @goktus/datavault
 # or
-yarn add datavault
+yarn add @goktus/datavault
 # or
-pnpm add datavault
+pnpm add @goktus/datavault
 ```
 
 ### Global CLI Installation
 
 ```bash
-npm install -g datavault
+npm install -g @goktus/datavault
 ```
 
 ### Development Setup
@@ -133,7 +133,7 @@ npm run balance
 #### Basic Import
 
 ```typescript
-import { AIRepository, DatasetMetadata } from 'datavault';
+import { AIRepository, DatasetMetadata } from '@goktus/datavault';
 
 // Initialize repository
 const repository = new AIRepository(privateKey, dbPath);
@@ -176,7 +176,7 @@ import {
   IrysFetcher,
   DatasetMetadata,
   QueryOptions 
-} from 'datavault';
+} from '@goktus/datavault';
 
 // Custom configuration
 const repository = new AIRepository(
@@ -227,7 +227,7 @@ import type {
   UploadResult,
   QueryResult,
   DatabaseRecord
-} from 'datavault';
+} from '@goktus/datavault';
 ```
 
 ## Metadata Tags

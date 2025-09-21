@@ -1,5 +1,5 @@
 {
-  "name": "datavault",
+  "name": "@goktus/datavault",
   "version": "1.0.0",
   "description": "Minimal AI Data Repository on Irys - Store and manage AI datasets, embeddings, and PyTorch model files on Irys blockchain",
   "main": "dist/index.js",
@@ -74,6 +74,9 @@
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@irys/sdk": "^0.2.11",
