@@ -73,13 +73,15 @@
     "url": "https://github.com/AzrielTheHellrazor/DataVault/issues"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@irys/sdk": "^0.2.11",
+    "arweave": "^1.15.7",
+    "arconnect": "^0.4.2",
     "sqlite3": "^5.1.6",
     "commander": "^11.1.0",
     "dotenv": "^16.3.1",
