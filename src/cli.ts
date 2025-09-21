@@ -13,8 +13,8 @@ dotenv.config();
 const program = new Command();
 
 program
-  .name('ai-repository')
-  .description('AI Data Repository CLI')
+  .name('datavault')
+  .description('DataVault CLI - AI Data Repository on Irys')
   .version('1.0.0');
 
 // Upload command

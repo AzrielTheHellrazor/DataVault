@@ -1,16 +1,11 @@
 import Irys from '@irys/sdk';
 import * as fs from 'fs-extra';
-import * as path from 'path';
 import { DatasetMetadata, UploadOptions } from '../types';
 
 export class IrysUploader {
   private irys: Irys;
-  private currency: string;
-  private url: string;
 
   constructor(privateKey: string, url: string = 'https://node2.irys.xyz', currency: string = 'arweave') {
-    this.url = url;
-    this.currency = currency;
     
     // Convert hex private key to JWK wallet format for Irys
     const jwk = this.hexToJWK(privateKey);
@@ -63,7 +58,7 @@ export class IrysUploader {
     }
   }
 
-  async uploadBuffer(buffer: Buffer, filename: string, options: UploadOptions): Promise<{ transactionId: string; receipt?: string }> {
+  async uploadBuffer(buffer: Buffer, _filename: string, options: UploadOptions): Promise<{ transactionId: string; receipt?: string }> {
     try {
       // Prepare tags
       const tags = this.prepareTags(options.metadata);

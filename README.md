@@ -1,31 +1,61 @@
 # AI Data Repository on Irys
 
-This project provides a minimal data repository for storing and managing AI datasets, embeddings, and PyTorch model files on Irys.
+[![npm version](https://badge.fury.io/js/datavault.svg)](https://www.npmjs.com/package/datavault)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+
+A minimal data repository for storing and managing AI datasets, embeddings, and PyTorch model files on Irys blockchain. Built with TypeScript and designed for production use.
 
 ## Features
 
-- **File Upload**: Upload AI datasets, embeddings, and PyTorch model files (.pt) to Irys
-- **Metadata Management**: Required metadata tags for each upload (App, Content-Type, Dataset-Name, Split, Version, Owner, Created-At)
-- **Batch Upload**: Efficiently upload large files in batches
-- **GraphQL Querying**: Filter by tags and time ranges, sorting and pagination
-- **File Download**: Download files to local folders in structured format using transaction ID
-- **Local Cache**: SQLite-based local cache/index for fast access
-- **CLI Interface**: Easy command-line interaction
-- **TypeScript Support**: Full type safety
+- 🚀 **File Upload**: Upload AI datasets, embeddings, and PyTorch model files (.pt) to Irys
+- 🏷️ **Metadata Management**: Required metadata tags for each upload (App, Content-Type, Dataset-Name, Split, Version, Owner, Created-At)
+- 📦 **Batch Upload**: Efficiently upload large files in batches
+- 🔍 **GraphQL Querying**: Filter by tags and time ranges, sorting and pagination
+- ⬇️ **File Download**: Download files to local folders in structured format using transaction ID
+- 💾 **Local Cache**: SQLite-based local cache/index for fast access
+- 🖥️ **CLI Interface**: Easy command-line interaction
+- 🔧 **TypeScript Support**: Full type safety and IntelliSense
 
 ## Installation
 
-1. Install dependencies:
+### As an NPM Package
+
 ```bash
+npm install datavault
+# or
+yarn add datavault
+# or
+pnpm add datavault
+```
+
+### Global CLI Installation
+
+```bash
+npm install -g datavault
+```
+
+### Development Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AzrielTheHellrazor/DataVault.git
+cd DataVault
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
 bun install
 ```
 
-2. Set up environment variables:
+3. Set up environment variables:
 ```bash
 cp env.example .env
 ```
 
-3. Edit the `.env` file:
+4. Edit the `.env` file:
 ```env
 IRYS_URL=https://node2.irys.xyz
 IRYS_PRIVATE_KEY=your_private_key_here
@@ -34,53 +64,78 @@ DATABASE_PATH=./data/repository.db
 LOCAL_STORAGE_PATH=./data/downloads
 ```
 
-4. Build the project:
+5. Build the project:
 ```bash
-bun run build
+npm run build
 ```
 
 ## Usage
 
 ### CLI Commands
 
+After installing globally, you can use the `datavault` command:
+
 #### File Upload
 ```bash
-bun run upload -- -f ./model.pt -a my-app -n mnist -s train -v 1.0.0 -o user@example.com --receipt
+datavault upload -f ./model.pt -a my-app -n mnist -s train -v 1.0.0 -o user@example.com --receipt
 ```
 
 #### Dataset Querying
 ```bash
 # Basic querying
-bun run query -- -n mnist -s train -l 10
+datavault query -n mnist -s train -l 10
 
 # Advanced filtering
-bun run query -- -n mnist --start-time 2024-01-01T00:00:00Z --end-time 2024-12-31T23:59:59Z
+datavault query -n mnist --start-time 2024-01-01T00:00:00Z --end-time 2024-12-31T23:59:59Z
 
 # List datasets of a specific app
-bun run query -- -a my-app -l 20
+datavault query -a my-app -l 20
 ```
 
 #### File Download
 ```bash
-bun run fetch -- -i <transaction_id> -o ./downloads/
+datavault fetch -i <transaction_id> -o ./downloads/
 ```
 
 #### Get Latest Version
 ```bash
-bun run latest -- -n mnist -s train
+datavault latest -n mnist -s train
 ```
 
 #### Account Balance
 ```bash
-bun run balance
+datavault balance
+```
+
+### Development CLI Commands
+
+If you're working with the source code:
+
+```bash
+# File Upload
+npm run upload -- -f ./model.pt -a my-app -n mnist -s train -v 1.0.0 -o user@example.com --receipt
+
+# Dataset Querying
+npm run query -- -n mnist -s train -l 10
+
+# File Download
+npm run fetch -- -i <transaction_id> -o ./downloads/
+
+# Get Latest Version
+npm run latest -- -n mnist -s train
+
+# Account Balance
+npm run balance
 ```
 
 ### Programmatic Usage
 
-```typescript
-import { AIRepository } from './src/repository';
-import { DatasetMetadata } from './src/types';
+#### Basic Import
 
+```typescript
+import { AIRepository, DatasetMetadata } from 'datavault';
+
+// Initialize repository
 const repository = new AIRepository(privateKey, dbPath);
 
 // File upload
@@ -109,6 +164,70 @@ const localPath = await repository.fetchFile({
 });
 
 await repository.close();
+```
+
+#### Advanced Usage
+
+```typescript
+import { 
+  AIRepository, 
+  IrysUploader, 
+  IrysQuery, 
+  IrysFetcher,
+  DatasetMetadata,
+  QueryOptions 
+} from 'datavault';
+
+// Custom configuration
+const repository = new AIRepository(
+  privateKey, 
+  dbPath, 
+  'https://node2.irys.xyz',  // Irys URL
+  'https://gateway.irys.xyz', // Gateway URL
+  'arweave'                   // Currency
+);
+
+// Batch upload
+const files = [
+  { filePath: './train.pt', metadata: trainMetadata },
+  { filePath: './test.pt', metadata: testMetadata },
+  { filePath: './val.pt', metadata: valMetadata }
+];
+
+const results = await repository.batchUpload(files, { 
+  receipt: true, 
+  batchSize: 10 
+});
+
+// Advanced querying
+const queryOptions: QueryOptions = {
+  filters: {
+    datasetName: 'mnist',
+    split: 'train',
+    startTime: '2024-01-01T00:00:00Z',
+    endTime: '2024-12-31T23:59:59Z'
+  },
+  limit: 50,
+  sort: 'timestamp',
+  order: 'desc'
+};
+
+const { results, nextCursor } = await repository.queryData(queryOptions);
+```
+
+#### TypeScript Support
+
+The package provides full TypeScript support with comprehensive type definitions:
+
+```typescript
+import type { 
+  DatasetMetadata,
+  QueryOptions,
+  UploadOptions,
+  UploadResult,
+  QueryResult,
+  DatabaseRecord
+} from 'datavault';
 ```
 
 ## Metadata Tags

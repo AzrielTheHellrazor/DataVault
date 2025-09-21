@@ -1,0 +1,74 @@
+# Source files (only include built files)
+src/
+examples/
+__tests__/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+env.example
+
+# Build artifacts
+*.tsbuildinfo
+*.log
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git files
+.git/
+.gitignore
+
+# Node modules (should not be in package anyway)
+node_modules/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Documentation (keep README.md)
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Linting
+.eslintrc*
+.eslintignore
+
+# TypeScript config (keep tsconfig.json for reference)
+tsconfig.json
+
+# Lock files
+package-lock.json
+yarn.lock
+bun.lockb
+
+# Temporary files
+tmp/
+temp/

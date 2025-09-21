@@ -3,10 +3,8 @@ import { QueryOptions, QueryResult } from '../types';
 
 export class IrysQuery {
   private client: GraphQLClient;
-  private gatewayUrl: string;
 
   constructor(gatewayUrl: string = 'https://gateway.irys.xyz') {
-    this.gatewayUrl = gatewayUrl;
     this.client = new GraphQLClient(`${gatewayUrl}/graphql`);
   }
 
@@ -40,10 +38,7 @@ export class IrysQuery {
     }
   }
 
-  private buildGraphQLQuery(options: QueryOptions): string {
-    const filters = this.buildFilterConditions(options.filters);
-    const sortField = options.sortBy === 'timestamp' ? 'block' : 'createdAt';
-    const sortOrder = options.sortOrder?.toUpperCase() || 'DESC';
+  private buildGraphQLQuery(_options: QueryOptions): string {
 
     return `
       query GetTransactions($first: Int, $after: String, $sort: TransactionSort, $filters: TransactionFilters) {
@@ -153,37 +148,6 @@ export class IrysQuery {
     return result;
   }
 
-  private buildFilterConditions(filters?: any): string {
-    if (!filters) return '';
-
-    const conditions: string[] = [];
-
-    if (filters.datasetName) {
-      conditions.push(`tags: { name: { equalTo: "Dataset-Name" }, value: { equalTo: "${filters.datasetName}" } }`);
-    }
-
-    if (filters.split) {
-      conditions.push(`tags: { name: { equalTo: "Split" }, value: { equalTo: "${filters.split}" } }`);
-    }
-
-    if (filters.version) {
-      conditions.push(`tags: { name: { equalTo: "Version" }, value: { equalTo: "${filters.version}" } }`);
-    }
-
-    if (filters.contentType) {
-      conditions.push(`tags: { name: { equalTo: "Content-Type" }, value: { equalTo: "${filters.contentType}" } }`);
-    }
-
-    if (filters.app) {
-      conditions.push(`tags: { name: { equalTo: "App" }, value: { equalTo: "${filters.app}" } }`);
-    }
-
-    if (filters.owner) {
-      conditions.push(`tags: { name: { equalTo: "Owner" }, value: { equalTo: "${filters.owner}" } }`);
-    }
-
-    return conditions.join(', ');
-  }
 
   private extractTags(tags: Array<{ name: string; value: string }>): any {
     const result: any = {};

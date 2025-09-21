@@ -1,13 +1,11 @@
 import { Database } from '../database';
 import { IrysUploader } from '../irys/uploader';
-import { IrysQuery } from '../irys/query';
 import { IrysFetcher } from '../irys/fetcher';
-import { DatasetMetadata, UploadOptions, QueryOptions, FetchOptions, DatabaseRecord } from '../types';
+import { DatasetMetadata, QueryOptions, FetchOptions, DatabaseRecord } from '../types';
 
 export class AIRepository {
   private database: Database;
   private uploader: IrysUploader;
-  private query: IrysQuery;
   private fetcher: IrysFetcher;
 
   constructor(
@@ -19,7 +17,6 @@ export class AIRepository {
   ) {
     this.database = new Database(dbPath);
     this.uploader = new IrysUploader(privateKey, irysUrl, currency);
-    this.query = new IrysQuery(gatewayUrl);
     this.fetcher = new IrysFetcher(gatewayUrl);
   }
 

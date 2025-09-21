@@ -14,6 +14,12 @@ export interface UploadOptions {
   batchSize?: number;
 }
 
+export interface UploadResult {
+  transactionId: string;
+  receipt?: string;
+  size?: number;
+}
+
 export interface QueryOptions {
   filters?: {
     datasetName?: string;

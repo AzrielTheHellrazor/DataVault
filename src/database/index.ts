@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
 import { promisify } from 'util';
-import { DatabaseRecord, DatasetMetadata } from '../types';
+import { DatabaseRecord } from '../types';
 
 export class Database {
   private db: sqlite3.Database;
