@@ -9,6 +9,9 @@ dist/
 build/
 *.tsbuildinfo
 
+# But keep dist/ for NPM package (remove this line if you want to exclude dist)
+!dist/
+
 # Environment variables
 .env
 .env.local
@@ -77,8 +80,9 @@ jspm_packages/
 # Optional REPL history
 .node_repl_history
 
-# Output of 'npm pack'
+# Output of 'npm pack' and publish
 *.tgz
+npm-debug.log*
 
 # Yarn Integrity file
 .yarn-integrity
@@ -92,7 +96,6 @@ jspm_packages/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/
@@ -114,5 +117,9 @@ test-*.ts
 *.spec.js
 *.spec.ts
 
-# Bun lockfile (keep it)
-# bun.lock
+# Lock files - keep package-lock.json for NPM
+bun.lockb
+yarn.lock
+
+# But keep package-lock.json for NPM
+!package-lock.json
